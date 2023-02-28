@@ -2,3 +2,5 @@ djangorestframework
 django-cors-headers
 django-environ
 pyjwt
+pika
+pika-stubs

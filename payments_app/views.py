@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework.request import Request
 from rest_framework import status
 from utils.utils import jwt_decode
+from .producer import publish_message
 
 
 def user_id_from_jwt_in_request(request: Request):
@@ -30,9 +31,15 @@ class PaymentMixin(object):
 
 class PaymentViewSet(PaymentMixin, viewsets.ModelViewSet):
     # define a custom create payment method and add a field to the serializer before it is saved
+    # todo: async create and publish
     def create(self, request, *args, **kwargs):
         user_id = user_id_from_jwt_in_request(request)
         if not user_id:
             return Response({'error': 'JWT decoding error!'}, status=status.HTTP_401_UNAUTHORIZED)
+        # user_id = 1
+        # request.data._mutable = True
         request.data['user_id'] = user_id
-        return super().create(request, *args, **kwargs)
+        # request.data._mutable = False
+        response = super().create(request, *args, **kwargs)
+        publish_message(exchange_name='payments', message=response.data)
+        return response
