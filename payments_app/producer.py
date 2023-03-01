@@ -1,6 +1,9 @@
 import pika
 import json
 from payments_prj.settings import rabbitmg_host
+import logging
+
+logger = logging.getLogger('payments')
 
 exchanges = {
     'payments': 'fanout',
@@ -8,7 +11,7 @@ exchanges = {
 
 
 def publish_message(exchange_name, message, routing_key=''):
-    print(f'publishing message to exchange: {exchange_name}, routing_key: {routing_key} message: {message}')
+    logger.debug(f'publishing message to exchange: {exchange_name}, routing_key: {routing_key} message: {message}')
     exchange_type = exchanges.get(exchange_name)
 
     # Establish a connection to RabbitMQ
