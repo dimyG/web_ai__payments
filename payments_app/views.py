@@ -37,12 +37,12 @@ class PaymentViewSet(PaymentMixin, viewsets.ModelViewSet):
     # todo: async create and publish
     def create(self, request, *args, **kwargs):
         user_id = user_id_from_jwt_in_request(request)
-        # if not user_id:
-        #     return Response({'error': 'JWT decoding error!'}, status=status.HTTP_401_UNAUTHORIZED)
-        user_id = 1
-        request.data._mutable = True
+        if not user_id:
+            return Response({'error': 'JWT decoding error!'}, status=status.HTTP_401_UNAUTHORIZED)
+        # user_id = 1
+        # request.data._mutable = True
         request.data['user_id'] = user_id
-        request.data._mutable = False
+        # request.data._mutable = False
         response = super().create(request, *args, **kwargs)
         publish_message(exchange_name='payments', message=response.data)
         return response
