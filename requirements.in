@@ -4,3 +4,4 @@ django-environ
 pyjwt
 pika
 pika-stubs
+psycopg2

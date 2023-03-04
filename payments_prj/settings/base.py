@@ -28,6 +28,8 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 django_secret_key = env('DJANGO_SECRET_KEY')  # False if not in os.environ because of casting above
 jwt_secret = env('JWT_SECRET')
 rabbitmg_host = env('RABBITMQ_HOST')
+postgres_host = env('POSTGRES_HOST')
+postgres_psw = env('POSTGRES_PSW')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -100,6 +102,17 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'payments_prj.urls'
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'payments_prj',
+        'HOST': postgres_host,
+        'PORT': '5432',
+        'USER': 'postgres',
+        'PASSWORD': postgres_psw
+    }
+}
 
 TEMPLATES = [
     {
