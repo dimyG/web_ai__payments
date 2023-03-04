@@ -5,3 +5,4 @@ pyjwt
 pika
 pika-stubs
 psycopg2
+gunicorn
