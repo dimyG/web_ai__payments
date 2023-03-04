@@ -254,3 +254,4 @@ fabric.properties
 # ---- end of jetbrains.gitignore content ----
 
 *.env
+aws_ecs_container/payments_task.json
