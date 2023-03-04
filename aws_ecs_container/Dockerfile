@@ -15,4 +15,4 @@ RUN apt-get install -y binutils libproj-dev gdal-bin vim
 
 COPY ./ ./
 
-CMD["gunicorn", "payments_prj.wsgi", "--bind", "0.0.0.0:8001", "--timeout 60"]
+CMD ["gunicorn", "payments_prj.wsgi", "--bind", "0.0.0.0:8001", "--timeout 60"]
