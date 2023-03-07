@@ -7,7 +7,8 @@ from rest_framework.response import Response
 from rest_framework.request import Request
 from rest_framework import status
 from utils.utils import jwt_decode
-from .producer import publish_message
+from .publisher import PublishClient
+from payments_prj.settings import rabbitmq_broker_id, rabbitmq_user, rabbitmq_psw, rabbitmq_host, rabbitmq_port
 import logging
 
 logger = logging.getLogger('payments')
@@ -44,5 +45,10 @@ class PaymentViewSet(PaymentMixin, viewsets.ModelViewSet):
         request.data['user_id'] = user_id
         # request.data._mutable = False
         response = super().create(request, *args, **kwargs)
-        publish_message(exchange_name='payments', message=response.data)
+        if response.status_code == status.HTTP_201_CREATED:
+            # publish the payment to the payments exchange
+            publisher = PublishClient(rabbitmq_broker_id=rabbitmq_broker_id, rabbitmq_user=rabbitmq_user,
+                                      rabbitmq_psw=rabbitmq_psw, region='eu-central-1', rabbitmq_host=rabbitmq_host,
+                                      rabbitmq_port=rabbitmq_port)
+            publisher.publish_message(exchange_name='payments', message=response.data)
         return response

@@ -25,11 +25,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 # Take environment variables from .env file
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
-django_secret_key = env('DJANGO_SECRET_KEY')  # False if not in os.environ because of casting above
-jwt_secret = env('JWT_SECRET')
-rabbitmg_host = env('RABBITMQ_HOST')
-postgres_host = env('POSTGRES_HOST')
-postgres_psw = env('POSTGRES_PSW')
+django_secret_key = os.environ.get('DJANGO_SECRET_KEY')  # False if not in os.environ because of casting above
+jwt_secret = os.environ.get('JWT_SECRET')
+rabbitmq_host = os.environ.get('RABBITMQ_HOST')
+rabbitmq_port = os.environ.get('RABBITMQ_PORT')
+rabbitmq_broker_id = os.environ.get('RABBITMQ_BROKER_ID')
+rabbitmq_user = os.environ.get('RABBITMQ_USER')
+rabbitmq_psw = os.environ.get('RABBITMQ_PSW')
+postgres_host = os.environ.get('POSTGRES_HOST')
+postgres_psw = os.environ.get('POSTGRES_PSW')
+
+if rabbitmq_port:
+    rabbitmq_port = int(rabbitmq_port)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
